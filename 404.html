@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting to Fireblood</title>
+  
+  <!-- This is a special script for Netlify SPA routing -->
+  <script>
+    // SPA Redirect for Netlify
+    // Modified from https://github.com/rafgraph/spa-github-pages
+    
+    // This script takes the current URL and converts it to a form that will redirect to
+    // index.html with the correct URL encoded in a special format that the script in index.html
+    // will then decode to route correctly in the React app
+    
+    // For example, if trying to access /some/page, this will redirect to /?/some/page
+    // which the script in index.html will then convert back to /some/page
+    
+    (function() {
+      // Local variables
+      var pathSegmentsToKeep = 0;
+      var l = window.location;
+      
+      // Get the pathname without the segments we want to remove
+      var cleanPath = l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/');
+      
+      // Redirect with the clean path, but include the original path, search, and hash as a query
+      l.replace(
+        cleanPath + '/?/' +
+        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    })();
+  </script>
+  
+  <style>
+    body {
+      background-color: #000;
+      color: #990000;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2rem;
+    }
+    a {
+      color: #cc0000;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .loading {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .loading span {
+      background-color: #990000;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin: 0 5px;
+      animation: pulse 1.5s infinite;
+    }
+    .loading span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .loading span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.2;
+        transform: scale(0.8);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h1>Redirecting to Fireblood</h1>
+    <p>Please wait while we redirect you to the homepage...</p>
+    <div class="loading">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <p style="margin-top: 30px;">If you are not redirected automatically, <a href="/">click here</a>.</p>
+  </div>
+  
+  <!-- Fallback redirect in case the SPA redirect fails -->
+  <script>
+    setTimeout(function() {
+      window.location.href = '/';
+    }, 3000);
+  </script>
+</body>
+</html>
